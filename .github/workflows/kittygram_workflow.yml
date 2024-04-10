@@ -68,7 +68,7 @@ jobs:
           tags: fersawas/kittygram_backend:latest
   frontend_tests:
     runs-on: ubuntu-latest
-    steps:
+    steps: 
       - uses: actions/checkout@v3
       - name: Set up nodeJS
         uses: actions/setup-node@v3
