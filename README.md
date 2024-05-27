@@ -1,26 +1,74 @@
-#  Как работать с репозиторием финального задания
+# TASKS
+## Описание проекта
+Проект kittygram позволяет создавать посты с котами, отмечать их достижения. Созданы docker образы, с помощью которых можно запустить проект.
+### Содержанеие
 
-## Что нужно сделать
+- [Технологии](#tech)
+- [Начало работы](#begining)
+- [Запуск через докер](#docker)
+- [Комнада проекта](#team)
 
-Настроить запуск проекта Kittygram в контейнерах и CI/CD с помощью GitHub Actions
+## <a name="tech">Технологии</a>
 
-## Как проверить работу с помощью автотестов
+- [Django](https://www.djangoproject.com/)
+- [Django REST](https://www.django-rest-framework.org/)
 
-В корне репозитория создайте файл tests.yml со следующим содержимым:
-```yaml
-repo_owner: ваш_логин_на_гитхабе
-kittygram_domain: полная ссылка (https://доменное_имя) на ваш проект Kittygram
-taski_domain: полная ссылка (https://доменное_имя) на ваш проект Taski
-dockerhub_username: ваш_логин_на_докерхабе
+## <a name="begining">Начало работы</a>
+
+### Начало работы
+
+Активируйте вирутальное окржуние:
+
+```
+python -m venv venv
 ```
 
-Скопируйте содержимое файла `.github/workflows/main.yml` в файл `kittygram_workflow.yml` в корневой директории проекта.
+### Установка зависимостей
 
-Для локального запуска тестов создайте виртуальное окружение, установите в него зависимости из backend/requirements.txt и запустите в корневой директории проекта `pytest`.
+Активируйте виртуальное окружение
 
-## Чек-лист для проверки перед отправкой задания
+```
+source venv/sqripts/activate
+```
 
-- Проект Taski доступен по доменному имени, указанному в `tests.yml`.
-- Проект Kittygram доступен по доменному имени, указанному в `tests.yml`.
-- Пуш в ветку main запускает тестирование и деплой Kittygram, а после успешного деплоя вам приходит сообщение в телеграм.
-- В корне проекта есть файл `kittygram_workflow.yml`.
+Установите зависимости из файла *requirements.txt*:
+
+```
+pip install -r requirements.txt
+```
+
+## <a name="docker">Запуск через docker</a>
+
+Зайти в корневую директорию. 
+Запустить docker файл:
+
+```
+docker compose -f docker-compose.yml up -d
+```
+
+Соберите и скопируйте статику
+
+```
+docker compose -f docker-compose.yml exec backend python manage.py collect_static
+docker compose -f docker-compose.yml exec backend cp -r /app/static/. /backend_static/static/ 
+```
+
+Примение миграции и заполните базу данных
+
+```
+docker compose -f docker-compose.yml exec backend python manage.py migrate
+docker compose -f docker-compose.yml exec backend python manage.py csv_to_sql
+```
+
+Ваш сайт доступен по адресу /localhost:8080/
+
+Если захотите отключить локальный сервер
+Введите следующие команды
+
+```
+docker compose -f docker-compose.yml down -v
+```
+
+## <a name="team">Команда проектка</a>
+
+- Паршин Денис - разработчик
